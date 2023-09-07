@@ -20,13 +20,17 @@ import net.jobhunt.backend.repository.EmployeeRepository;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("api/v1/employees")
+@RequestMapping
 public class EmployeeController {
 
 		@Autowired
 		private EmployeeRepository employeeRepository;
 		
-		@GetMapping
+		@GetMapping("/")
+		public String defaultHomepage(){
+			return "Welcome to EMS!";
+		}
+		@GetMapping("/employees")
 		public List<Employee> getAllEmployees(){
 			return employeeRepository.findAll();
 		}
@@ -36,14 +40,14 @@ public class EmployeeController {
 			return employeeRepository.save(employee);
 		}
 		
-		@GetMapping("/{id}")
+		@GetMapping("/employees/{id}")
 		public ResponseEntity<Employee> getEmployeeById(@PathVariable long id){
 			Employee employee = employeeRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("Employee doesn't exist with id :" + id));
 			return ResponseEntity.ok(employee);
 		}
 		
-		@PutMapping("/{id}")
+		@PutMapping("/employees/{id}")
 		public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Employee employee){
 			Employee updatedEmployee = employeeRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("Employee Not Found with id :" + id));
@@ -56,7 +60,7 @@ public class EmployeeController {
 			return ResponseEntity.ok(updatedEmployee);
 		}
 		
-		@DeleteMapping("/{id}")
+		@DeleteMapping("/employees/{id}")
 		public String deleteEmployee(@PathVariable long id){
 			Employee retrieveEmployee = employeeRepository.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("Employee Not Found with id :" + id));
